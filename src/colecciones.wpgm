@@ -2,74 +2,6 @@ import wollok.game.*
 import capy.*
 
 
-object posicionAleatoria {
-  method calcular() = game.at(
-    0.randomUpTo(game.width()).truncate(0),
-    0.randomUpTo(game.width()).truncate(0)
-  )
-}
-
-object lataDeCerveza {
-  var longitud = 40
-  var property position = posicionAleatoria.calcular()
-  method tratate() {
-    longitud = longitud * 0.9
-  }
-  method image() = "lata_roja.png"
-  method esReciclable()= true
-}
-const botellaDeGaseosa2 = object{
-
-}
-
-object botellaDeGaseosa {
-  var huella = 100
-  var property position = posicionAleatoria.calcular()
-  method image() = "lata_naranja.png"
-  method tratate(){
-    huella = huella - 5
-  }
-  method esReciclable()= true
-
-
-}
-
-object barrilDeCombustible {
-  var property position = posicionAleatoria.calcular()
-  method image() = "residuos-toxicos.png"
-  method tratate(){
-    //No hace nada
-  }
-  method esReciclable()= false
-
-}
-
-object plantaDeTratamiento {
-  var property position = game.at(8, 8)
-  
-  method image() = "planta.png"
-  
-}
-
-object petroleo {
-  method consumo() = 1200
-}
-
-object biogas {
-  /* el biogas es el resultado de la degradación
-  de materia degradable, así que en si es una forma de reciclar */
-  method consumo() = 0
-}
-
-object gasoil {
-  var pureza = 0.4
-  
-  method pureza(porentaje) {
-    pureza = porentaje
-  }
-  
-  method consumo() = 500 * pureza
-}
 
 program ejemplo {
   game.boardGround("humedal.png")
@@ -81,36 +13,13 @@ program ejemplo {
   game.addVisual(plantaDeTratamiento)
   game.addVisualCharacter(capy)
 
-  keyboard.r().onPressDo(
-    { 
+  game.onCollideDo(capy,{algo=>capy.recoger(algo)})
 
-      capy.recoger(1)    
-    }
-  )
-  keyboard.t().onPressDo(
-        { 
-        capy.tratar(1)
-
-        }
-      )
-  keyboard.h().onPressDo(
-    {
-        
-    }
-  )
-  keyboard.s().onPressDo(
-    {
-      capy.soltar()
-    }
-  )
-  keyboard.e().onPressDo(
-    {
-      capy.deciTuCantidadDeBasura()
-    }
-  )
-  keyboard.c().onPressDo({
-    capy.deciCuantosSonReciclables()
-  })
+  keyboard.t().onPressDo({capy.tratar()})
+  keyboard.h().onPressDo({  } )
+  keyboard.s().onPressDo({capy.soltar()} )
+  keyboard.e().onPressDo({capy.deciTuCantidadDeBasura()  })
+  keyboard.c().onPressDo({capy.deciCuantosSonReciclables() })
   game.start()
 }
   

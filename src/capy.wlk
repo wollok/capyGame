@@ -3,14 +3,22 @@ object capy {
   
   var property position = game.origin()
  
-  method image() = "capy_tranqui.png"
+  method image() = "capy_" + (if (self.tieneAlgoMuyMalo()) "triste" else "tranqui") + ".png"
+  
+  method tieneAlgoMuyMalo() = basuras.any{b=>b.huella() > 500}
   
   method recoger(basura){
     game.removeVisual(basura)
     basuras.add(basura)
   }
+
+  method deciTotalHuella() {
+    game.say(capy," total " + basuras.sum{b=>b.huella()})
+  }
   method tratar(){
-      basuras.first().tratate()
+      //basuras.first().tratate()
+      //game.say(plantaDeTratamiento,"a tratar: " + (basuras.filter{basura=>planta.recibe(basura)}).toString())
+      basuras.forEach{b=>b.tratate()}
   }
   method soltar(){
     game.addVisual(basuras.last())
@@ -20,8 +28,10 @@ object capy {
     game.say(self,"cantidad basura " + basuras.size())
   }
   method deciCuantosSonReciclables(){
-   // game.say(self,"cantidad reciclables " + if(basura == null) 0 else if (basura.esReciclable()) 1 else 0)
+    game.say(self,"cantidad reciclables " + self.contarReciclables())
   }
+  method contarReciclables() = 
+    basuras.count({basura => basura.esReciclable()})
  // method basurasReciclables()= basuras.filter({basura => basura.esReciclable()})
  // 
  // method decirCantidadDe(lista){
@@ -47,13 +57,14 @@ object lataDeCerveza {
     longitud = longitud * 0.9
     game.say(plantaDeTratamiento,"lata reciclada, longitud " + longitud)
   }
+  method huella() = longitud * 50
  
   method image() = "lata_roja.png"
   method esReciclable()= true
 }
 
 object botellaDeGaseosa {
-  var huella = 100
+  var property huella = 100
   var property position = posicionAleatoria.calcular()
   method image() = "lata_naranja.png"
 
@@ -68,6 +79,7 @@ object botellaDeGaseosa {
 }
 
 object barrilDeCombustible {
+  var property combustible = petroleo
   var property position = posicionAleatoria.calcular()
   method image() = "residuos-toxicos.png"
 
@@ -77,7 +89,7 @@ object barrilDeCombustible {
   }
 
   method esReciclable()= false
-
+  method huella() = combustible.consumo()
 }
 
 object plantaDeTratamiento {

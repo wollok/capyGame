@@ -16,7 +16,7 @@ program ejemplo {
   game.onCollideDo(capy,{algo=>capy.recoger(algo)})
 
   keyboard.t().onPressDo({capy.tratar()})
-  keyboard.h().onPressDo({  } )
+  keyboard.h().onPressDo({capy.deciTotalHuella()} )
   keyboard.s().onPressDo({capy.soltar()} )
   keyboard.e().onPressDo({capy.deciTuCantidadDeBasura()  })
   keyboard.c().onPressDo({capy.deciCuantosSonReciclables() })
